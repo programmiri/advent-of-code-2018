@@ -1,4 +1,4 @@
-function sum(a, b) {
-  return a + b;
+function calcFrequency(input) {
+  return input.reduce((accumulator, currVal) => accumulator + currVal);
 }
-export default sum;
+export default calcFrequency;
