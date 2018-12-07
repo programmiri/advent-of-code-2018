@@ -3,14 +3,10 @@ function getCheckSum(input) {
   let threeMatches = 0;
 
   input.forEach((str) => {
-    const found = {};
-    str.split('').forEach((char) => {
-      if (found[char]) {
-        found[char] = found[char] + 1
-      } else {
-        found[char] = 1
-      }
-    })
+    const found = str.split('').reduce((acc, char) => {
+      acc[char] =  acc[char] ? acc[char] + 1 : 1;
+      return acc;
+    }, {})
     const foundTwo = Object.keys(found).find( (key) => found[key] == 2)
     const foundThree = Object.keys(found).find( (key) => found[key] == 3)
 
