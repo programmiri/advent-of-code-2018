@@ -1,4 +1,4 @@
-import {getCheckSum} from './day02'
+import getCheckSum from './task1'
 
 describe('getCheckSum', ()=>{
   it('returns the checksum 12', () => {

@@ -1,8 +1,3 @@
-function calcFrequency(input) {
-  return input.reduce((accumulator, currVal) => accumulator + currVal);
-}
-
-
 function returnFirstRepeatingFrequency(input) {
 
   const reachedFrequencies = new Set([0]);
@@ -19,6 +14,6 @@ function returnFirstRepeatingFrequency(input) {
   }
 }
 
-export { calcFrequency, returnFirstRepeatingFrequency }
+export default returnFirstRepeatingFrequency;
 
 

@@ -26,8 +26,6 @@ function sumUpMultiple(acc, curr) {
     return acc;
 }
 
-
-
 function getCheckSum(input) {
   const r = input
     .map(countChars)
@@ -37,5 +35,5 @@ function getCheckSum(input) {
   return r.twoMatches * r.threeMatches;
 }
 
-export {getCheckSum}
+export default getCheckSum;
 
