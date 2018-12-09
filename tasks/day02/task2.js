@@ -1,31 +1,33 @@
 function getMatchingChars(string1, string2) {
   const firstString = string1.split('');
   const secondString = string2.split('');
-
-  const sameCharAtSamePosition = firstString.filter((element, index) => {
+  return firstString.filter((element, index) => {
     return element === secondString[index];
   });
-  return sameCharAtSamePosition;
+}
+
+function findMatchingStrings(string1, string2) {
+  if (string1 === string2) return;
+  const matchingChars = getMatchingChars(string1, string2);
+  if (matchingChars.length > string1.length - 2) {
+    return matchingChars.join('');
+  }
 }
 
 function getCommonLetters(input) {
-  let chars = [];
-
+  const chars = [];
   input.forEach(element => {
     const stringToCheck = element;
-    const lengthOfString = stringToCheck.length;
-    input.forEach(element => {
-      if (element === stringToCheck) {
-        return;
-      }
-      const matchingChars = getMatchingChars(element, stringToCheck);
 
-      if (matchingChars.length > lengthOfString - 2) {
-        chars.push(matchingChars);
-      }
-    });
+    const strings = input.reduce((acc, element) => {
+      const matchingString = findMatchingStrings(element, stringToCheck);
+      if (matchingString) acc.push(matchingString);
+      return acc;
+    }, []);
+
+    strings.length > 0 ? chars.push(strings[0]) : null;
   });
-  return chars[0].join('');
+  return chars[0];
 }
 
 export default getCommonLetters;
