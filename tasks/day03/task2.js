@@ -1429,43 +1429,37 @@ function getSingleClaimedRecs(gridObj) {
   }, []);
 }
 
-function getClaimId(input) {
-  const parsedInput = parseInput(input);
-  const grid = setClaimsOnGrid(parsedInput);
-  const singleClaimedRecs = getSingleClaimedRecs(grid);
-
-  const claimedIds = singleClaimedRecs.reduce((acc, curr) => {
-    acc.add(curr.id);
+function countSingleClaimsPerId(singleClaimedRecs) {
+  return singleClaimedRecs.reduce((acc, curr) => {
+    if (!acc[curr.id]) {
+      acc[curr.id] = 1;
+    } else {
+      acc[curr.id]++;
+    }
     return acc;
-  }, new Set());
+  }, {});
+}
 
-  const iterator = claimedIds.entries();
-
-  const listOfClaimedIds = [];
-  for (let entry of iterator) {
-    const idToTest = entry[0];
-    const currSums = {};
-    currSums.id = idToTest;
-
-    const sumClaims = singleClaimedRecs.reduce((acc, curr) => {
-      if (curr.id == idToTest) {
-        acc++;
-      }
-      return acc;
-    }, 0);
-    currSums.claims = sumClaims;
-    listOfClaimedIds.push(currSums);
-  }
-
-  const result = listOfClaimedIds.find(val => {
-    const currId = val.id;
-    const currClaims = val.claims;
+function findIdForExclusiveClaim(idClaimsCount, parsedInput) {
+  const id = Object.keys(idClaimsCount).find(val => {
+    const currId = val;
+    const currClaims = idClaimsCount[val];
     const match = parsedInput.find(val => {
       return val.id == currId && val.squares == currClaims;
     });
     return match;
   });
-
-  return result.id;
+  return parseInt(id, 10);
 }
+
+function getClaimId(input) {
+  const parsedInput = parseInput(input);
+  const grid = setClaimsOnGrid(parsedInput);
+  const singleClaimedRecs = getSingleClaimedRecs(grid);
+  const idClaimsCount = countSingleClaimsPerId(singleClaimedRecs);
+  const result = findIdForExclusiveClaim(idClaimsCount, parsedInput);
+
+  return result;
+}
+
 export { parseInput, getClaimId };
