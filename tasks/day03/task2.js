@@ -1351,26 +1351,7 @@ function buildRec(x, y, id) {
   };
 }
 
-function createGrid(num) {
-  const grid = {};
-  [...Array(num)].forEach((val, i) => {
-    let x = i++;
-    [...Array(num)].forEach((val, i) => {
-      let y = i++;
-      let rec = buildRec(x, y);
-      let key = x + '.' + y;
-      grid[key] = rec;
-    });
-  });
-  return grid;
-}
-
-function findRec(x, y, grid) {
-  const key = x + '.' + y;
-  return grid[key];
-}
-
-function setClaims(rec, id) {
+function setClaimOnRec(rec, id) {
   rec.id = id;
   rec.claimedBy.push(id);
 }
@@ -1379,8 +1360,12 @@ function claimSquares(claim, grid) {
   const { id, x, y, width, height } = claim;
   [...Array(width)].forEach((val, i) => {
     [...Array(height)].forEach((val, j) => {
-      const rec = findRec(x + i, y + j, grid);
-      setClaims(rec, id);
+      const key = x + i + '.' + (y + j);
+      if (!grid[key]) {
+        const rec = buildRec(x + i, y + j);
+        grid[key] = rec;
+      }
+      setClaimOnRec(grid[key], id);
     });
   });
 }
@@ -1408,15 +1393,6 @@ function parseInput(input) {
 
       return acc;
     }, []);
-}
-
-function setClaimsOnGrid(input) {
-  const grid = createGrid(1000);
-
-  input.forEach(val => {
-    claimSquares(val, grid);
-  });
-  return grid;
 }
 
 function getSingleClaimedRecs(gridObj) {
@@ -1449,12 +1425,18 @@ function findIdForExclusiveClaim(idClaimsCount, parsedInput) {
     });
     return match;
   });
+
   return parseInt(id, 10);
 }
 
 function getClaimId(input) {
+  const grid = {};
   const parsedInput = parseInput(input);
-  const grid = setClaimsOnGrid(parsedInput);
+
+  parsedInput.forEach(val => {
+    claimSquares(val, grid);
+  });
+
   const singleClaimedRecs = getSingleClaimedRecs(grid);
   const idClaimsCount = countSingleClaimsPerId(singleClaimedRecs);
   const result = findIdForExclusiveClaim(idClaimsCount, parsedInput);

@@ -6,34 +6,20 @@ function buildRec(x, y) {
   };
 }
 
-function createGrid(num) {
-  const grid = {};
-  [...Array(num)].forEach((val, i) => {
-    let x = i++;
-    [...Array(num)].forEach((val, i) => {
-      let y = i++;
-      let rec = buildRec(x, y);
-      let key = x + '.' + y;
-      grid[key] = rec;
-    });
-  });
-  return grid;
-}
-
-function findRec(x, y, grid) {
-  const key = x + '.' + y;
-  return grid[key];
-}
-
 function setClaimOnRec(rec) {
   rec.claim = rec.claim + 1;
 }
 
-function claimSquares(x, y, width, height, grid) {
+function claimSquares(claim, grid) {
+  const { x, y, width, height } = claim;
   [...Array(width)].forEach((val, i) => {
     [...Array(height)].forEach((val, j) => {
-      const rec = findRec(x + i, y + j, grid);
-      setClaimOnRec(rec);
+      const key = x + i + '.' + (y + j);
+      if (!grid[key]) {
+        const rec = buildRec(x + i, y + j);
+        grid[key] = rec;
+      }
+      setClaimOnRec(grid[key]);
     });
   });
 }
@@ -63,11 +49,11 @@ function parseInput(input) {
 }
 
 function getSquareInches(input) {
-  const grid = createGrid(1000);
+  const grid = {};
   const parsedInput = parseInput(input);
 
   parsedInput.forEach(val => {
-    claimSquares(val.x, val.y, val.width, val.height, grid);
+    claimSquares(val, grid);
   });
 
   const keys = Object.keys(grid);
