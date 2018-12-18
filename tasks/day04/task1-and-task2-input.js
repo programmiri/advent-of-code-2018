@@ -18,7 +18,7 @@ export const testRecords = [
   '[1518-11-05 00:03] Guard #99 begins shift'
 ];
 
-const puzzleInput = [
+export const puzzleInput = [
   '[1518-04-12 00:36] falls asleep',
   '[1518-02-22 00:58] wakes up',
   '[1518-10-17 00:01] wakes up',

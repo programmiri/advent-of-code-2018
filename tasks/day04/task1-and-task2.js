@@ -1,5 +1,3 @@
-import { testRecords } from './task1-input';
-
 function parseInputRow(data, currGuard) {
   const guardId = data.match(/Guard #([0-9]+)/);
   if (guardId) {
@@ -157,15 +155,41 @@ function findMinuteGuardIsAsleepMost(guardList, id) {
       return acc;
     },
     { minute: 0, count: 0 }
-  ).minute;
+  );
 }
 
-function multipleIdWithMinute(records) {
+function multipleIdWithMinuteStrategyOne(records) {
   const guardList = createGuardList(records);
   const id = parseInt(findGuardAsleepTheMost(guardList));
-  const minute = findMinuteGuardIsAsleepMost(guardList, id);
+  const minute = parseInt(findMinuteGuardIsAsleepMost(guardList, id).minute);
 
   return id * minute;
 }
 
-export { formatInput, multipleIdWithMinute };
+function multipleIdWithMinuteStrategyTwo(records) {
+  const guardList = createGuardList(records);
+
+  const result = Object.keys(guardList).reduce(
+    (acc, curr) => {
+      const listAsleepOnMinutes = findMinuteGuardIsAsleepMost(guardList, curr);
+      const currCount = listAsleepOnMinutes.count;
+      const currMinute = listAsleepOnMinutes.minute;
+
+      if (currCount > acc.count) {
+        acc.count = currCount;
+        acc.minute = currMinute;
+        acc.guardId = parseInt(curr, 10);
+      }
+
+      return acc;
+    },
+    { count: 0, minute: 0, guardId: 0 }
+  );
+  return result.guardId * result.minute;
+}
+
+export {
+  formatInput,
+  multipleIdWithMinuteStrategyOne,
+  multipleIdWithMinuteStrategyTwo
+};

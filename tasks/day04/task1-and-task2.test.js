@@ -1,8 +1,12 @@
-import { testRecords } from './task1-input';
-import { formatInput, multipleIdWithMinute } from './task1';
+import { testRecords, puzzleInput } from './task1-and-task2-input';
+import {
+  formatInput,
+  multipleIdWithMinuteStrategyOne,
+  multipleIdWithMinuteStrategyTwo
+} from './task1-and-task2';
 
 describe('formatInput', () => {
-  it('sorts the record data chronological', () => {
+  it('formatInputsorts the record data chronological', () => {
     const unsortedInput = testRecords;
     const sortedInput = [
       {
@@ -146,6 +150,12 @@ describe('formatInput', () => {
   });
 });
 
-it('multiplies the guardId with the minute the guard is most asleep', () => {
-  expect(multipleIdWithMinute(testRecords)).toBe(240);
+describe('multipleIdWithMinute', () => {
+  it('StrategyOne: multiplies the guardId of the guard who is asleep most minutes with the minute the guard is asleep most', () => {
+    expect(multipleIdWithMinuteStrategyOne(testRecords)).toBe(240);
+  });
+
+  it('StrategyTwo: multiplies the guardId of the guard who is asleep on a specific minute the most with said minute ', () => {
+    expect(multipleIdWithMinuteStrategyTwo(puzzleInput)).toBe(4455);
+  });
 });
