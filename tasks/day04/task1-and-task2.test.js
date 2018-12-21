@@ -156,6 +156,6 @@ describe('multipleIdWithMinute', () => {
   });
 
   it('StrategyTwo: multiplies the guardId of the guard who is asleep on a specific minute the most with said minute ', () => {
-    expect(multipleIdWithMinuteStrategyTwo(puzzleInput)).toBe(4455);
+    expect(multipleIdWithMinuteStrategyTwo(testRecords)).toBe(4455);
   });
 });

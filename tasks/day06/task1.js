@@ -35,10 +35,10 @@ function defineInputItem(locations, item) {
 function calcDimensionsOfGrid(locations) {
   return Object.keys(locations).reduce(
     (acc, curr) => {
-      if (acc.x || locations[curr].x > acc.x) {
+      if (!acc.x || locations[curr].x > acc.x) {
         acc.x = locations[curr].x;
       }
-      if (acc.y || locations[curr].y > acc.y) {
+      if (!acc.y || locations[curr].y > acc.y) {
         acc.y = locations[curr].y;
       }
       return acc;
@@ -73,7 +73,7 @@ function calcDistance(location1, location2) {
   return Math.abs(x2 - x1) + Math.abs(y2 - y1);
 }
 
-function updateWithClosestLocation(gridItem, locations, iteratorHere) {
+function updateWithClosestLocation(gridItem, locations) {
   const gridItemCoord = [gridItem.x, gridItem.y];
 
   const result = Object.keys(locations).reduce(
@@ -117,10 +117,11 @@ function countClosestLocations(grid, location) {
 
 function calcSizeOfLargestArea(input) {
   const locations = buildListOfLocations(input);
-  const grid = buildGrid(locations);
-  const updatedGrid = addLocationsToGrid(grid, locations);
 
-  const gridWithDistance = updatedGrid.map(val => {
+  const gridWithDistance = addLocationsToGrid(
+    buildGrid(locations),
+    locations
+  ).map(val => {
     if (val.isLocation === true) {
       return val;
     } else {
@@ -142,5 +143,33 @@ function calcSizeOfLargestArea(input) {
     return acc;
   }, null);
 }
+
+// // task2
+// function calcDistanceToAllLocations(gridItem, locations) {
+//   const gridItemCoord = [gridItem.x, gridItem.y];
+//   return Object.keys(locations).reduce((acc, curr) => {
+//     const currLocation = locations[curr];
+//     const distance = calcDistance(gridItemCoord, [
+//       currLocation.x,
+//       currLocation.y
+//     ]);
+
+//     if (distance < 0) {
+//       throw new Error();
+//     }
+//     acc = acc + distance;
+//     return acc;
+//   }, 0);
+// }
+
+// // task2
+// function calcLocationsWithinRegion(input) {
+//   const locations = buildListOfLocations(input);
+//   const grid = buildGrid(locations);
+//   return grid.filter(val => {
+//     const distance = calcDistanceToAllLocations(val, locations);
+//     return distance < 32;
+//   }).length;
+// }
 
 export { calcSizeOfLargestArea };
